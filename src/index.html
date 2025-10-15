@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noterlik Rehberi - Modern</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.125rem;
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sidebar-content {
+            padding: 1rem;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Content Area */
+        .content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            min-height: 600px;
+        }
+
+        .content-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .content-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .content-body {
+            padding: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Document Grid */
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .document-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .document-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .document-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.75rem;
+        }
+
+        .document-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .document-content {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .document-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.75rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .document-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #1e293b;
+                --bg-secondary: #0f172a;
+                --bg-tertiary: #334155;
+                --text-primary: #f1f5f9;
+                --text-secondary: #cbd5e1;
+                --text-muted: #64748b;
+                --border-color: #334155;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Noterlik Rehberi</h1>
+                    <p>Modern Web Arayüzü</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Dökümanlarda ara..." id="searchInput">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">Navigasyon</h2>
+                </div>
+                <div class="sidebar-content">
+                    <ul class="nav-list" id="navList">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" data-category="all">
+                                <i class="fas fa-home nav-icon"></i>
+                                Tümü
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="MAHKEME KARARLARI">
+                                <i class="fas fa-gavel nav-icon"></i>
+                                Mahkeme Kararları
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="GENEL">
+                                <i class="fas fa-folder nav-icon"></i>
+                                Genel
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="GENELGELER">
+                                <i class="fas fa-file-alt nav-icon"></i>
+                                Genelgeler
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="İŞLEME">
+                                <i class="fas fa-cogs nav-icon"></i>
+                                İşleme
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="YAZI SERVİSİ">
+                                <i class="fas fa-edit nav-icon"></i>
+                                Yazı Servisi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="ARTES - Araç Tescil">
+                                <i class="fas fa-car nav-icon"></i>
+                                ARTES
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="MAKALELER">
+                                <i class="fas fa-newspaper nav-icon"></i>
+                                Makaleler
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="MEVZUAT">
+                                <i class="fas fa-book nav-icon"></i>
+                                Mevzuat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="TNB MEVZUATI">
+                                <i class="fas fa-balance-scale nav-icon"></i>
+                                TNB Mevzuatı
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="NOTERLİK KANUNU">
+                                <i class="fas fa-scroll nav-icon"></i>
+                                Noterlik Kanunu
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="İŞLEMLER">
+                                <i class="fas fa-tasks nav-icon"></i>
+                                İşlemler
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="HESAP MAKİNESİ">
+                                <i class="fas fa-calculator nav-icon"></i>
+                                Hesap Makinesi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="VEZNE SERVİSİ">
+                                <i class="fas fa-cash-register nav-icon"></i>
+                                Vezne Servisi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="İNTERNET SİTELERİ">
+                                <i class="fas fa-globe nav-icon"></i>
+                                İnternet Siteleri
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="YAŞ HESAPLA">
+                                <i class="fas fa-calendar-alt nav-icon"></i>
+                                Yaş Hesapla
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="KAYNAK - DESTEK">
+                                <i class="fas fa-life-ring nav-icon"></i>
+                                Kaynak - Destek
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="TAKVİM">
+                                <i class="fas fa-calendar nav-icon"></i>
+                                Takvim
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="TAVSİYELER">
+                                <i class="fas fa-lightbulb nav-icon"></i>
+                                Tavsiyeler
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-category="YARDIM">
+                                <i class="fas fa-question-circle nav-icon"></i>
+                                Yardım
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <main class="content">
+                <div class="content-header">
+                    <h1 class="content-title" id="contentTitle">Noterlik Rehberi</h1>
+                    <p class="content-subtitle" id="contentSubtitle">Tüm noterlik dökümanlarına erişim</p>
+                </div>
+                <div class="content-body">
+                    <!-- Stats -->
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalDocs">-</div>
+                            <div class="stat-label">Toplam Döküman</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalCategories">-</div>
+                            <div class="stat-label">Kategori</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="filteredDocs">-</div>
+                            <div class="stat-label">Görüntülenen</div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters">
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">Tüm Kategoriler</option>
+                        </select>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="title">Başlığa Göre</option>
+                            <option value="category">Kategoriye Göre</option>
+                            <option value="date">Tarihe Göre</option>
+                        </select>
+                    </div>
+
+                    <!-- Loading -->
+                    <div class="loading" id="loadingState">
+                        <div class="spinner"></div>
+                        <span>Dökümanlar yükleniyor...</span>
+                    </div>
+
+                    <!-- Documents Grid -->
+                    <div class="document-grid" id="documentGrid">
+                        <!-- Documents will be loaded here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let allDocuments = [];
+        let filteredDocuments = [];
+        let currentCategory = 'all';
+        let searchTerm = '';
+
+        // Initialize the application
+        async function init() {
+            try {
+                showLoading(true);
+                
+                // Load data
+                const response = await fetch('data/noterlik_complete.json');
+                const data = await response.json();
+                
+                allDocuments = data.documents;
+                filteredDocuments = allDocuments;
+                
+                // Update stats
+                updateStats();
+                
+                // Populate category filter
+                populateCategoryFilter(data.categories);
+                
+                // Render documents
+                renderDocuments();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                showLoading(false);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Veriler yüklenirken hata oluştu.');
+            }
+        }
+
+        // Show/hide loading state
+        function showLoading(show) {
+            const loadingState = document.getElementById('loadingState');
+            const documentGrid = document.getElementById('documentGrid');
+            
+            if (show) {
+                loadingState.style.display = 'flex';
+                documentGrid.style.display = 'none';
+            } else {
+                loadingState.style.display = 'none';
+                documentGrid.style.display = 'grid';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const documentGrid = document.getElementById('documentGrid');
+            documentGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--error-color);">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+            showLoading(false);
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalDocs').textContent = allDocuments.length;
+            document.getElementById('totalCategories').textContent = Object.keys(getCategories()).length;
+            document.getElementById('filteredDocs').textContent = filteredDocuments.length;
+        }
+
+        // Get unique categories
+        function getCategories() {
+            const categories = {};
+            allDocuments.forEach(doc => {
+                if (!categories[doc.category]) {
+                    categories[doc.category] = [];
+                }
+                categories[doc.category].push(doc);
+            });
+            return categories;
+        }
+
+        // Populate category filter
+        function populateCategoryFilter(categories) {
+            const categoryFilter = document.getElementById('categoryFilter');
+            categoryFilter.innerHTML = '<option value="">Tüm Kategoriler</option>';
+            
+            Object.keys(categories).forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = `${category} (${categories[category].length})`;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Render documents
+        function renderDocuments() {
+            const documentGrid = document.getElementById('documentGrid');
+            
+            if (filteredDocuments.length === 0) {
+                documentGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>Hiç döküman bulunamadı.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            documentGrid.innerHTML = filteredDocuments.map(doc => `
+                <div class="document-card" onclick="openDocument('${doc.url}')">
+                    <div class="document-category">${doc.category}</div>
+                    <h3 class="document-title">${doc.main_title || doc.title}</h3>
+                    <p class="document-content">${doc.content}</p>
+                    <div class="document-meta">
+                        <span><i class="fas fa-file"></i> ${doc.file}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter documents
+        function filterDocuments() {
+            let filtered = allDocuments;
+
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(doc => doc.category === currentCategory);
+            }
+
+            // Filter by search term
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(doc => 
+                    doc.title.toLowerCase().includes(term) ||
+                    doc.main_title.toLowerCase().includes(term) ||
+                    doc.content.toLowerCase().includes(term) ||
+                    doc.category.toLowerCase().includes(term)
+                );
+            }
+
+            filteredDocuments = filtered;
+            renderDocuments();
+            updateStats();
+        }
+
+        // Open document
+        function openDocument(url) {
+            window.open(url, '_blank');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search input
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                filterDocuments();
+            });
+
+            // Navigation links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Update category
+                    currentCategory = link.dataset.category;
+                    
+                    // Update content title
+                    const contentTitle = document.getElementById('contentTitle');
+                    const contentSubtitle = document.getElementById('contentSubtitle');
+                    
+                    if (currentCategory === 'all') {
+                        contentTitle.textContent = 'Noterlik Rehberi';
+                        contentSubtitle.textContent = 'Tüm noterlik dökümanlarına erişim';
+                    } else {
+                        contentTitle.textContent = link.textContent.trim();
+                        contentSubtitle.textContent = `${currentCategory} kategorisindeki dökümanlar`;
+                    }
+                    
+                    // Filter documents
+                    filterDocuments();
+                });
+            });
+
+            // Category filter
+            const categoryFilter = document.getElementById('categoryFilter');
+            categoryFilter.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    currentCategory = e.target.value;
+                    
+                    // Update navigation
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    const activeLink = document.querySelector(`[data-category="${currentCategory}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+                filterDocuments();
+            });
+
+            // Sort filter
+            const sortFilter = document.getElementById('sortFilter');
+            sortFilter.addEventListener('change', (e) => {
+                const sortBy = e.target.value;
+                filteredDocuments.sort((a, b) => {
+                    switch (sortBy) {
+                        case 'title':
+                            return a.title.localeCompare(b.title, 'tr');
+                        case 'category':
+                            return a.category.localeCompare(b.category, 'tr');
+                        case 'date':
+                            return new Date(b.date || 0) - new Date(a.date || 0);
+                        default:
+                            return 0;
+                    }
+                });
+                renderDocuments();
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
