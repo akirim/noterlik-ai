@@ -56,85 +56,153 @@ class NoterlikViewer {
     }
 
     async loadMockData() {
-        // Simüle edilmiş veri - gerçek implementasyonda JSON dosyalarından yüklenecek
-        this.data = [
-            {
-                title: "1990-18 sayılı genelge",
-                description: "Nüfus cüzdanı, pasaport ve benzeri işlemlerin tasdikli suretlerini her sayfasından ayrı ayrı tarifede yer alan harç miktarının tahsili icap eder.",
-                category: "genelge",
-                year: "1990",
-                file: "1990-18-sayili-genelge.html",
-                keywords: ["nüfus cüzdanı", "pasaport", "harç", "tasdikli suret"]
-            },
-            {
-                title: "132 sayılı kanun",
-                description: "TÜRK STANDARDLARI ENSTİTÜSÜ KURULUŞ KANUNU - Kanun Numarası : 132 Kabul Tarihi : 18/11/1960",
-                category: "kanun",
-                year: "1960",
-                file: "132-sayili-kanun.html",
-                keywords: ["tse", "standart", "kuruluş", "kanun"]
-            },
-            {
-                title: "Vekaletname düzeltme beyannamesi",
-                description: "Vekaletname düzeltme işlemleri hakkında mahkeme kararları ve uygulama esasları.",
-                category: "mahkeme",
-                year: "2023",
-                file: "vekaletname-duzeltme-beyannamesi.html",
-                keywords: ["vekaletname", "düzeltme", "beyanname", "mahkeme"]
-            },
-            {
-                title: "Finansal kiralama sözleşmesi yazısı",
-                description: "Finansal kiralama sözleşmelerinin noterlik işlemleri ve hukuki düzenlemeleri.",
-                category: "sozlesme",
-                year: "2022",
-                file: "finansal-kiralama-sozlesmesi-yazisi.html",
-                keywords: ["finansal kiralama", "sözleşme", "kira", "noterlik"]
-            },
-            {
-                title: "Noterin hukuki sorumluluğu",
-                description: "Noterlerin hukuki sorumlulukları hakkında mahkeme kararları ve yasal düzenlemeler.",
-                category: "noterlik",
-                year: "2023",
-                file: "noterin-hukuki-sorumlulugu-hak-mahkeme-kararlari.html",
-                keywords: ["noter", "sorumluluk", "hukuki", "mahkeme kararı"]
-            },
-            {
-                title: "Avukat dışındakiler için dava vekaletnamesi",
-                description: "Avukat olmayan kişiler için dava vekaletnamesi düzenlenmesi ve şartları.",
-                category: "vekalet",
-                year: "2021",
-                file: "avukat-disindakiler-icin-dava-vekaletnamesi.html",
-                keywords: ["avukat", "vekaletname", "dava", "temsil"]
+        try {
+            // Gerçek JSON dosyalarını yükle
+            const response = await fetch('json_output/master_index.json');
+            if (!response.ok) {
+                throw new Error('Master index dosyası bulunamadı');
             }
-        ];
-
-        // Daha fazla simüle edilmiş veri ekle
-        for (let i = 0; i < 100; i++) {
-            const years = ['1970', '1980', '1990', '2000', '2010', '2020', '2023'];
-            const categories = ['genelge', 'kanun', 'mahkeme', 'sozlesme', 'vekalet', 'noterlik'];
-            const categoryNames = {
-                'genelge': 'Genelge',
-                'kanun': 'Kanun',
-                'mahkeme': 'Mahkeme Kararı',
-                'sozlesme': 'Sözleşme',
-                'vekalet': 'Vekaletname',
-                'noterlik': 'Noterlik İşlemi'
-            };
-
-            const category = categories[Math.floor(Math.random() * categories.length)];
-            const year = years[Math.floor(Math.random() * years.length)];
             
-            this.data.push({
-                title: `${year}-${Math.floor(Math.random() * 100)} sayılı ${categoryNames[category].toLowerCase()}`,
-                description: `${categoryNames[category]} hakkında detaylı bilgiler ve yasal düzenlemeler.`,
-                category: category,
-                year: year,
-                file: `${year}-${Math.floor(Math.random() * 100)}-sayili-${category}.html`,
-                keywords: [category, year, "hukuk", "yasal"]
+            const masterIndex = await response.json();
+            
+            if (masterIndex.total_files === 0 || !masterIndex.files || masterIndex.files.length === 0) {
+                console.warn('Master index boş, örnek dosyalardan veri yükleniyor...');
+                await this.loadSampleData();
+                return;
+            }
+
+            // Master index'ten verileri yükle
+            this.data = masterIndex.files.map(file => {
+                const category = this.categorizeFile(file.file_path);
+                const year = this.extractYear(file.file_path);
+                
+                return {
+                    title: file.title || this.extractTitleFromPath(file.file_path),
+                    description: file.description || 'Detaylı bilgi için dosyayı açın.',
+                    category: category,
+                    year: year,
+                    file: file.file_path.replace(/\\/g, '/').replace('.json', '.html'),
+                    keywords: file.keywords || [],
+                    wordCount: file.word_count || 0,
+                    linkCount: file.link_count || 0,
+                    imageCount: file.image_count || 0
+                };
             });
+
+            console.log(`${this.data.length} gerçek dosya yüklendi`);
+            
+        } catch (error) {
+            console.error('Gerçek veri yükleme hatası:', error);
+            console.log('Örnek veriler yükleniyor...');
+            await this.loadSampleData();
         }
 
         this.filteredData = [...this.data];
+        this.updateStats();
+    }
+
+    updateStats() {
+        if (this.data.length === 0) return;
+
+        // Kategori istatistikleri
+        const categoryStats = {};
+        const years = new Set();
+        let totalWords = 0;
+
+        this.data.forEach(item => {
+            categoryStats[item.category] = (categoryStats[item.category] || 0) + 1;
+            if (item.year) years.add(item.year);
+            if (item.wordCount) totalWords += item.wordCount;
+        });
+
+        // DOM güncellemeleri
+        const totalDocsEl = document.getElementById('totalDocs');
+        const totalGenelgesEl = document.getElementById('totalGenelges');
+        const totalKanunlarEl = document.getElementById('totalKanuns');
+        const totalMahkemeEl = document.getElementById('totalKarars');
+
+        if (totalDocsEl) totalDocsEl.textContent = this.data.length.toLocaleString('tr-TR');
+        if (totalGenelgesEl) totalGenelgesEl.textContent = (categoryStats.genelge || 0).toLocaleString('tr-TR');
+        if (totalKanunlarEl) totalKanunlarEl.textContent = (categoryStats.kanun || 0).toLocaleString('tr-TR');
+        if (totalMahkemeEl) totalMahkemeEl.textContent = (categoryStats.mahkeme || 0).toLocaleString('tr-TR');
+
+        console.log('İstatistikler güncellendi:', {
+            totalDocs: this.data.length,
+            categories: categoryStats,
+            yearRange: years.size > 0 ? `${Math.min(...years)}-${Math.max(...years)}` : '2023',
+            totalWords: totalWords
+        });
+    }
+
+    async loadSampleData() {
+        // Örnek JSON dosyalarından veri yükle
+        const sampleFiles = [
+            '1990-18-sayili-genelge.json',
+            '132-sayili-kanun.json',
+            'vekaletname-duzeltme-beyannamesi.json',
+            'finansal-kiralama-sozlesmesi-yazisi.json',
+            'noterin-hukuki-sorumlulugu-hak-mahkeme-kararlari.json',
+            'avukat-disindakiler-icin-dava-vekaletnamesi.json'
+        ];
+
+        this.data = [];
+
+        for (const fileName of sampleFiles) {
+            try {
+                const response = await fetch(`json_output/A7614095-C9D7-4C82-8BBC-8DB7279DFB60/${fileName}`);
+                if (response.ok) {
+                    const jsonData = await response.json();
+                    const category = this.categorizeFile(fileName);
+                    const year = this.extractYear(fileName);
+                    
+                    this.data.push({
+                        title: jsonData.metadata.title || this.extractTitleFromPath(fileName),
+                        description: jsonData.metadata.description || jsonData.content.text.substring(0, 200) + '...',
+                        category: category,
+                        year: year,
+                        file: fileName.replace('.json', '.html'),
+                        keywords: jsonData.metadata.keywords || [],
+                        wordCount: jsonData.content.text.split(' ').length,
+                        linkCount: jsonData.content.links.length,
+                        imageCount: jsonData.content.images.length
+                    });
+                }
+            } catch (error) {
+                console.warn(`Örnek dosya yüklenemedi: ${fileName}`, error);
+            }
+        }
+
+        console.log(`${this.data.length} örnek dosya yüklendi`);
+    }
+
+    categorizeFile(filePath) {
+        const fileName = filePath.toLowerCase();
+        
+        if (fileName.includes('genelge') || /\d{4}-\d+-sayili-genelge/.test(fileName)) {
+            return 'genelge';
+        } else if (fileName.includes('kanun') || fileName.includes('law')) {
+            return 'kanun';
+        } else if (fileName.includes('mahkeme') || fileName.includes('karar')) {
+            return 'mahkeme';
+        } else if (fileName.includes('sozlesme') || fileName.includes('sözleşme')) {
+            return 'sozlesme';
+        } else if (fileName.includes('vekalet') || fileName.includes('vekaletname')) {
+            return 'vekalet';
+        } else if (fileName.includes('noterlik') || fileName.includes('noter')) {
+            return 'noterlik';
+        }
+        
+        return 'diger';
+    }
+
+    extractYear(filePath) {
+        const match = filePath.match(/(\d{4})/);
+        return match ? match[1] : '2023';
+    }
+
+    extractTitleFromPath(filePath) {
+        const fileName = filePath.split('/').pop().split('.')[0];
+        return fileName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
     handleSearch() {

@@ -59,6 +59,11 @@ archive/
 html/
 db/
 
+# JSON output files - don't push to git (too large)
+json_output/
+*.json
+!master_index_sample.json
+
 # Development and analysis files
 *_analysis.json
 *_crawler.py
