@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hiyerarşi Görüntüleyici</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-screen w-screen overflow-hidden bg-gray-50 text-gray-900">
+    <div class="h-full flex">
+      <aside class="w-96 border-r border-gray-200 bg-white flex flex-col">
+        <div class="p-3 border-b">
+          <input id="searchInput" type="text" placeholder="Başlık ara..." class="w-full rounded border px-3 py-2 text-sm" />
+        </div>
+        <div id="treeContainer" class="flex-1 overflow-auto p-2"></div>
+      </aside>
+
+      <main class="flex-1 flex flex-col">
+        <div id="breadcrumb" class="px-4 py-2 text-sm text-gray-600 border-b bg-white"></div>
+        <iframe id="preview" class="flex-1 w-full bg-white" src="" title="Önizleme"></iframe>
+      </main>
+    </div>
+
+    <script src="viewer.js"></script>
+  </body>
+  </html>
+
+

@@ -57,6 +57,7 @@ backup_*/
 # Archive files (HTML files are now in JSON format)
 archive/
 html/
+db/
 
 # Development and analysis files
 *_analysis.json
